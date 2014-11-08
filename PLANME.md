@@ -1,15 +1,60 @@
-Liberries
------
+# System Components
 
-- [OpenKinect](http://openkinect.org/wiki/Documentation)
+- Message Queue
+- OpenNI Device Monitor
+- Dance Interpreter
+- MusicCoord Decision Engine
+- Music Player
+- *[UPDATE THIS]* Suite de Visualization
+- *[UPDATE THIS]* ...
 
-Notes
-----
-Install OpenKinect on OS X:
+# Messaging
 
-    brew update
-    brew install libfreenect
-    git clone git@github.com:OpenKinect/libfreenect.git
-    cd libfreenect/wrappers/python/
-    python setup.py install
-    
+Messaging is done with [Redis PUB/SUB](http://redis.io/topics/pubsub). Message contents are [JSON](http://www.json.org/) strings.
+
+## Message Types
+
+Different message types will be sent on different redis pub/sub channels.
+
+*Exact formats TBD*
+
+### `dancer-state`
+
+These messages will stream rapid fire.
+
+    {
+        "timestamp": 1415446637.891655,     // when this update came in
+        "points": [
+            [1,1,1],                        // Head position X,Y,Z
+            [1,2,1],                        // Neck position x,y,z
+            ...                             // the other ones too... full list soon
+        ]
+    }
+
+### `dance-beat`
+
+These messages will spew out as irregularly as Tanner dances.
+
+    {
+        "timestamp": 1415446637.891655,     // when we noticed this beat
+        "type": "head",                     // what part of the body that is rocking a beat
+        "intensity": 123                    // how intense was that head bob
+    }
+
+*intensity scale to be decided*
+
+### `dance-move`
+
+These messages will happen rarely and are saved for special occasions.
+
+    {
+        "timestamp": 1415446637.891655,     // when we noticed this stance
+        "move": "boogie-nights",            // what move did we notice
+        "intensity": 1234234                // how epic was this move's execution
+    }
+
+#### Moves we can notice *...probably*
+
+- boogie-nights
+- metal-headbang
+- drunk-and-passed-out
