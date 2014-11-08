@@ -2,31 +2,28 @@
 Install pyaudio here: http://people.csail.mit.edu/hubert/pyaudio/
 
 """
-
 import argparse
-import redis
+
 import pyaudio
 import wave
+
+from subscriber import Subscriber
 
 CHUNK = 1024
 
 
-class Bumper(object):
+class Bumper(Subscriber):
     """Simple object that listens to beat output and hits the bass, yo"""
-    def __init__(self, bass_path, redis_host='localhost', redis_port=6379,
-                 channels=None):
+    def __init__(self, bass_path, channels=None, **kwargs):
         # pubsub connection
         if channels is None:
             channels = ['dance-beat']
-        self.channels = channels
-        client = redis.StrictRedis(host=redis_host, port=redis_port)
-        self.pubsub = client.pubsub()
+        super(Bumper, self).__init__(channels, **kwargs)
 
         # audio player
         self.bass_path = bass_path
-        self.open_audio_stream()
 
-    def open_audio_stream(self):
+    def on_subscribe(self):
         self.fp = wave.open(self.bass_path, 'rb')
         self.audio = pyaudio.PyAudio()
         self.audio_stream = self.audio.open(
@@ -36,20 +33,13 @@ class Bumper(object):
             output=True
         )
 
-    def close_audio_stream(self):
+    def on_close(self):
         self.audio_stream.stop_stream()
         self.audio_stream.close()
         self.audio.terminate()
         self.fp.close()
 
-    def subscribe(self):
-        self.open_audio_stream()
-        self.pubsub.subscribe(self.channels)
-        for beat in self.pubsub.listen():
-            self.play_beat()
-        self.close_audio_stream()
-
-    def play_beat(self):
+    def on_event(self, beat):
         data = self.fp.readframes(CHUNK)
         while data:
             self.audio_stream.write(data)
