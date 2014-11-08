@@ -16,11 +16,11 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		00B936C617DFF02000BCDCDF /* shader.frag in Sources */ = {isa = PBXBuildFile; fileRef = 00B936C417DFF02000BCDCDF /* shader.frag */; };
 		00B936C717DFF02000BCDCDF /* shader.vert in Sources */ = {isa = PBXBuildFile; fileRef = 00B936C517DFF02000BCDCDF /* shader.vert */; };
-		4AFCBF3847634F16B1BE6CF2 /* CubeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 964163D28E2744B898476828 /* CubeApp.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		D479EDE4BFCE4A1BB0D5F043 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = C676D72B5BB44C9D92E11B31 /* CinderApp.icns */; };
+		F40565FB1A0E88180081F464 /* Sketch01.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F40565FA1A0E88180081F464 /* Sketch01.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,13 +36,13 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		526123B8A3064D6792E6244D /* Cube_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Cube_Prefix.pch; sourceTree = "<group>"; };
+		526123B8A3064D6792E6244D /* Sketch01_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Sketch01_Prefix.pch; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
-		8D1107320486CEB800E47090 /* Cube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cube.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		964163D28E2744B898476828 /* CubeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = CubeApp.cpp; path = ../src/CubeApp.cpp; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Sketch01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sketch01.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF93A70A4037411AA49AB13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C676D72B5BB44C9D92E11B31 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../../../data/CinderApp.icns; sourceTree = "<group>"; };
+		C676D72B5BB44C9D92E11B31 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../../../../../Cinder/samples/data/CinderApp.icns; sourceTree = "<group>"; };
+		F40565FA1A0E88180081F464 /* Sketch01.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sketch01.cpp; path = ../src/Sketch01.cpp; sourceTree = "<group>"; };
 		F464C9331E324688A1A824E3 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,7 +77,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				964163D28E2744B898476828 /* CubeApp.cpp */,
+				F40565FA1A0E88180081F464 /* Sketch01.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -109,12 +109,12 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Cube.app */,
+				8D1107320486CEB800E47090 /* Sketch01.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* Cube */ = {
+		29B97314FDCFA39411CA2CEA /* Sketch01 */ = {
 			isa = PBXGroup;
 			children = (
 				01B97315FEAEA392516A2CEA /* Blocks */,
@@ -124,14 +124,14 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
-			name = Cube;
+			name = Sketch01;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
 				F464C9331E324688A1A824E3 /* Resources.h */,
-				526123B8A3064D6792E6244D /* Cube_Prefix.pch */,
+				526123B8A3064D6792E6244D /* Sketch01_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -161,9 +161,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* Cube */ = {
+		8D1107260486CEB800E47090 /* Sketch01 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Cube" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Sketch01" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -173,10 +173,10 @@
 			);
 			dependencies = (
 			);
-			name = Cube;
+			name = Sketch01;
 			productInstallPath = "$(HOME)/Applications";
-			productName = Cube;
-			productReference = 8D1107320486CEB800E47090 /* Cube.app */;
+			productName = Sketch01;
+			productReference = 8D1107320486CEB800E47090 /* Sketch01.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -185,8 +185,9 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0500;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Cube" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Sketch01" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -196,11 +197,11 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* Cube */;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Sketch01 */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* Cube */,
+				8D1107260486CEB800E47090 /* Sketch01 */,
 			);
 		};
 /* End PBXProject section */
@@ -221,7 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4AFCBF3847634F16B1BE6CF2 /* CubeApp.cpp in Sources */,
+				F40565FB1A0E88180081F464 /* Sketch01.cpp in Sources */,
 				00B936C617DFF02000BCDCDF /* shader.frag in Sources */,
 				00B936C717DFF02000BCDCDF /* shader.vert in Sources */,
 			);
@@ -240,7 +241,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Cube_Prefix.pch;
+				GCC_PREFIX_HEADER = Sketch01_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -249,7 +250,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
-				PRODUCT_NAME = Cube;
+				PRODUCT_NAME = Sketch01;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
@@ -266,12 +267,12 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Cube_Prefix.pch;
+				GCC_PREFIX_HEADER = Sketch01_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
-				PRODUCT_NAME = Cube;
+				PRODUCT_NAME = Sketch01;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -282,14 +283,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
-				CINDER_PATH = ../../../..;
+				CINDER_PATH = ../../../../../Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 			};
@@ -299,8 +300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
-				CINDER_PATH = ../../../..;
+				CINDER_PATH = ../../../../../Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -315,7 +315,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Cube" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Sketch01" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -324,7 +324,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Cube" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Sketch01" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
