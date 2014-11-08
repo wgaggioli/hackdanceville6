@@ -1,6 +1,7 @@
 import argparse
 import time
 import random
+import json
 
 import redis
 
@@ -40,12 +41,12 @@ class BeatSimulator(object):
         return 60. / self.bpm
 
     def get_msg(self):
-        return {
+        return json.dumps({
             "timestamp": time.time(),
             "type": random.choice(BODYPARTS),
             "intensity": random.randint(1, 65536)
-        }
-
+        })
+    
     def run(self):
         while True:
             interval = self.get_interval()
