@@ -24,7 +24,7 @@ BODYPARTS = [
 
 
 class BeatSimulator(object):
-    def __init__(self, init_bpm=60., avg_drift=0.5, drift_prob=.2,
+    def __init__(self, init_bpm=60., avg_drift=0.5, drift_prob=.7,
                  channel='dance-beat', redis_host='localhost',
                  redis_port=6379):
         self.bpm = init_bpm
@@ -51,7 +51,6 @@ class BeatSimulator(object):
             interval = self.get_interval()
             time.sleep(interval)
             msg = self.get_msg()
-            print msg
             self.redis.publish(self.channel, msg)
 
 
