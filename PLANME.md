@@ -23,7 +23,7 @@ Different message types will be sent on different redis pub/sub channels.
 These messages will stream rapid fire.
 
     {
-        "timestamp": 1415446637,            // when this update came in, long - time in milliseconds
+        "timestamp": 1415489686,            // when this update came in, long - time in milliseconds
         "points": {
             "head": [1,1,1],                        // Head position X,Y,Z
             "neck": [1,2,1],                        // Neck position x,y,z
@@ -36,7 +36,7 @@ These messages will stream rapid fire.
 These messages will spew out as irregularly as Tanner dances.
 
     {
-        "timestamp": 1415446637,            // when we noticed this beat, long - time in milliseconds
+        "timestamp": 1415489686,            // when we noticed this beat, long - time in milliseconds
         "type": "head",                     // what part of the body that is rocking a beat
         "position": [1,1,1],                // where was the head when this went down
         "intensity": 123                    // how intense was that head bob
@@ -49,7 +49,7 @@ These messages will spew out as irregularly as Tanner dances.
 These messages will happen rarely and are saved for special occasions.
 
     {
-        "timestamp": 1415446637,            // when we noticed this stance, long - time in millis
+        "timestamp": 1415489686,            // when we noticed this stance, long - time in millis
         "move": "boogie-nights",            // what move did we notice
         "intensity": 1234234                // how epic was this move's execution
     }
