@@ -38,6 +38,7 @@ These messages will spew out as irregularly as Tanner dances.
     {
         "timestamp": 1415446637.891655,     // when we noticed this beat
         "type": "head",                     // what part of the body that is rocking a beat
+        "position": [1,1,1],                // where was the head when this went down
         "intensity": 123                    // how intense was that head bob
     }
 
