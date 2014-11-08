@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>407FA924-66D0-4E76-9E90-FA16F275445D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Sketch01</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3E862A13-07D4-4C80-A4C2-F8F6DF4D2595</key>
+		<string>https://github.com/wgaggioli/hackdanceville6.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>visualization/cinder/sketch01/xcode/Sketch01.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3E862A13-07D4-4C80-A4C2-F8F6DF4D2595</key>
+		<string>../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/wgaggioli/hackdanceville6.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3E862A13-07D4-4C80-A4C2-F8F6DF4D2595</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3E862A13-07D4-4C80-A4C2-F8F6DF4D2595</string>
+			<key>IDESourceControlWCCName</key>
+			<string>hackdanceville6</string>
+		</dict>
+	</array>
+</dict>
+</plist>
