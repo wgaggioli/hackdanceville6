@@ -5,7 +5,7 @@ import redis
 class Subscriber(object):
     def __init__(self, channels, redis_host='localhost', redis_port=6379):
         self.channels = channels
-        client = redis.StrictRedis(host=redis_host, port=redis_port)
+        client = redis.Redis(host=redis_host, port=redis_port)
         self.pubsub = client.pubsub()
 
     def on_subscribe(self):
