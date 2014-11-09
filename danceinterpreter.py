@@ -24,9 +24,10 @@ BODYPARTS = [
 ]
 BODYPARTS_LOWER = [s.lower() for s in BODYPARTS]
 CACHE_FRAMES = 4
-VELOCITY_BEAT_CUTOFF = 1.5
-MAGNITUDE_CUTOFF = 0.2
-MINIMUM_BEAT_OFFSET = 200
+VELOCITY_DELTA_CUTOFF = 1.15
+MAGNITUDE_SUM_CUTOFF = 1
+MINIMUM_BEAT_OFFSET = 250
+ACTIVE_POINTS_FOR_BEAT = 4
 
 
 def get_vector_delta(a,b):
@@ -82,14 +83,14 @@ class DanceInterpreter(object):
                 part_positions.pop(0)
             values.append((partname, self.analyze_part(partname)))
         # pick max value
-        if len(values):
-            print timestamp, self.last_beat_timestamp, timestamp - self.last_beat_timestamp
+        if len(values) > ACTIVE_POINTS_FOR_BEAT:
             if timestamp - self.last_beat_timestamp < MINIMUM_BEAT_OFFSET:
                 return
             partname, beat_value = max(values, key=itemgetter(1))
+            beat_value = sum([v for k,v in values])
             if beat_value > 0:
-                print 'bow'
                 self.fire_beat(partname, beat_value)
+                print 'bow', beat_value
 
     def analyze_part(self, partname):
         positions = self.positions[partname]
@@ -98,7 +99,7 @@ class DanceInterpreter(object):
         if len(positions) < 3:
             return 0 #  not enough data to continue
         velocity = (positions[-1] - positions[-2]) * self.time_delta
-        if sum([abs(v) for v in velocity]) < MAGNITUDE_CUTOFF:
+        if sum([abs(v) for v in velocity]) < MAGNITUDE_SUM_CUTOFF:
             velocity[0] = velocity[1] = velocity[2] = 0
         velocities.append(velocity)
         velocity_count = len(velocities)
@@ -113,10 +114,10 @@ class DanceInterpreter(object):
             return 0 #  not enough data to continue
         if delta_count > CACHE_FRAMES:
             deltas.pop(0)
-        beat_worthy = [(d > VELOCITY_BEAT_CUTOFF) for d in deltas]
+        beat_worthy = [(d > VELOCITY_DELTA_CUTOFF) for d in deltas]
         if beat_worthy[-2] and not beat_worthy[-1]:
             return deltas[-2]
-        return 0
+        return 0 #  nothing worth reporting
 
     def fire_beat(self, partname, value):
         timestamp = self.timestamps[-1]
