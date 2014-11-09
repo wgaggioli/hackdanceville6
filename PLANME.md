@@ -54,6 +54,30 @@ These messages will happen rarely and are saved for special occasions.
         "intensity": 1234234                // how epic was this move's execution
     }
 
+### `song-analysis`
+
+Initial information about the song - 
+
+    {
+        "title": "blah",                    // song title
+        "startTimestamp": 1415489686,       // start time of playing song, long - time in millis
+        "initialLength": 224,               // frames length of song
+        "tempo": 22000                      // tempo of song
+        "beatFrames": [
+            ...
+        ]
+    }
+    
+### `song-adjust`
+
+Adjustment request for altering playback of a song -
+
+    {
+        "title": "blah",                    // song title
+        "timestamp": 1415489686,            // request timestamp, long - time in millis
+        "offsetInMillis": 224,              // offset request to alter tempo (+/-)
+    }
+
 #### Moves we can notice *...probably*
 
 - boogie-nights
