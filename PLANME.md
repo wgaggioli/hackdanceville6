@@ -31,6 +31,14 @@ These messages will stream rapid fire.
         }
     }
 
+### `dancer-image`
+
+Image pixel array from heatmap
+
+    {
+        LOTS OF NUMBERZ O'ER HERE
+    }
+    
 ### `dance-beat`
 
 These messages will spew out as irregularly as Tanner dances.
