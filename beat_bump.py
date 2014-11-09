@@ -26,25 +26,25 @@ class Bumper(Subscriber):
     def on_subscribe(self):
         self.fp = wave.open(self.bass_path, 'rb')
         self.audio = pyaudio.PyAudio()
+
+    def on_close(self):
+        self.audio.terminate()
+        self.fp.close()
+
+    def on_event(self, beat):
+        data = self.fp.readframes(CHUNK)
         self.audio_stream = self.audio.open(
             format=self.audio.get_format_from_width(self.fp.getsampwidth()),
             channels=self.fp.getnchannels(),
             rate=self.fp.getframerate(),
             output=True
         )
-
-    def on_close(self):
-        self.audio_stream.stop_stream()
-        self.audio_stream.close()
-        self.audio.terminate()
-        self.fp.close()
-
-    def on_event(self, beat):
-        data = self.fp.readframes(CHUNK)
         while data:
             self.audio_stream.write(data)
             data = self.fp.readframes(CHUNK)
         self.fp.rewind()
+        self.audio_stream.stop_stream()
+        self.audio_stream.close()
 
 
 if __name__ == "__main__":
