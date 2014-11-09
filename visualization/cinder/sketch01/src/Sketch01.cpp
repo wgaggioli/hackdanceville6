@@ -29,6 +29,7 @@ using namespace ci;
 using namespace ci::app;
 
 #define USE_FILE 0
+#define USE_INPUT_AUDIO 0
 
 class Sketch01App : public AppNative {
 public:
@@ -108,10 +109,12 @@ void Sketch01App::setup()
 	mMonitorNode2 = audio::Context::master()->makeNode( new audio::MonitorNode() );
 	mLowpassNode = audio::Context::master()->makeNode( new audio::FilterLowPassNode() );
 	mHighpassNode = audio::Context::master()->makeNode( new audio::FilterHighPassNode() );
+#if	USE_INPUT_AUDIO
 	mInputNode = audio::Context::master()->createInputDeviceNode();
-
-	//mInputDeviceNode >> mLowpassNode;
-	//mInputDeviceNode >> mHighpassNode;
+	mInputNode >> mLowpassNode;
+	mInputNode >> mHighpassNode;
+	mInputNode->enable();
+#endif
 
 	mLowpassNode >> mMonitorNode1;
 	mHighpassNode >> mMonitorNode2;
@@ -273,7 +276,11 @@ void Sketch01App::draw()
 	for( auto const &jointPair : mJointMap ) {
 		const vec3 &pt = jointPair.second;
 		ci::gl::color( Color( 1, 1, 1 ) );
-		ci::gl::drawSphere( pt, 10.0f, 12 );
+		size_t size = 10.0f;
+		if( mMonitorNode1->isEnabled() ) {
+			size *= mMonitorNode1->getVolume() * 10.0f;
+		}
+		ci::gl::drawSphere( pt, size, 12 );
 	}
 
 	for( auto const &p : mParticles ) {
