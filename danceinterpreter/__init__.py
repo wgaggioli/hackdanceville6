@@ -74,7 +74,7 @@ class DanceInterpreter(object):
             return #  not enough data to continue
         velocity = (positions[-1] - positions[-2]) * self.time_delta
         print velocity
-        if sum([abs(v) for v in velocity]) < 0.1:
+        if sum([abs(v) for v in velocity]) < 0.15:
             velocity[0] = velocity[1] = velocity[2] = 0
         #print velocity,
         velocities.append(velocity)
