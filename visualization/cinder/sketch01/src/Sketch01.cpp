@@ -17,9 +17,9 @@
 #include "cinder/audio/FilterNode.h"
 #include "cinder/audio/InputNode.h"
 #include "cinder/audio/Utilities.h"
-#include <cinder/Json.h>
-#include <cinder/MayaCamUI.h>
-#include <cinder/Rand.h>
+#include "cinder/Json.h"
+#include "cinder/MayaCamUI.h"
+#include "cinder/Rand.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -76,6 +76,7 @@ public:
 
 	};
 	std::deque<Particle> mParticles;
+    std::deque<Particle> handParticles;
 	ci::vec2 mMousePos;
 };
 
