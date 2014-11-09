@@ -101,7 +101,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_ANGLE|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;..\..\..\..\..\Cinder\include;..\..\..\..\..\Cinder\boost;..\..\..\..\..\Cinder\include\ANGLE;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\..\..\Cinder\include;..\..\..\..\..\Cinder\boost;..\..\..\..\..\Cinder\include\ANGLE;..\lib;..\lib\zeromq\$(Platform)\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CINDER_GL_ANGLE;WIN32;_DEBUG;_WINDOWS;NOMINMAX;_WIN32_WINNT=0x0502;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -116,7 +116,7 @@
       <AdditionalIncludeDirectories>"..\..\..\..\..\Cinder\\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder-$(PlatformToolset)-ANGLE_d.lib;libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cinder-$(PlatformToolset)-ANGLE_d.lib;libEGL.lib;libGLESv2.lib;../lib/zeromq/$(Platform)/lib/libzmq-v120-mt-gd-4_0_4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\..\..\Cinder\lib\msw\$(PlatformTarget);</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -163,13 +163,13 @@ xcopy /y "..\..\..\..\..\Cinder\lib\msw\x86\d3dcompiler_46.dll" "$(OutDir)"</Com
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_ANGLE|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\include;..\..\..\..\..\Cinder\include;..\..\..\..\..\Cinder\boost;..\..\..\..\..\Cinder\include\ANGLE;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\..\..\Cinder\include;..\..\..\..\..\Cinder\boost;..\..\..\..\..\Cinder\include\ANGLE;..\lib;..\lib\zeromq\$(Platform)\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CINDER_GL_ANGLE;CINDER_GL_ES_3;WIN32;NDEBUG;_WINDOWS;NOMINMAX;_WIN32_WINNT=0x0502;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>cinder-$(PlatformToolset)-ANGLE.lib;libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cinder-$(PlatformToolset)-ANGLE.lib;libEGL.lib;libGLESv2.lib;../lib/zeromq/$(Platform)/lib/libzmq-v120-mt-4_0_4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\..\..\Cinder\lib\msw\$(PlatformTarget)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -197,6 +197,11 @@ xcopy /y "..\..\..\..\..\Cinder\lib\msw\x86\d3dcompiler_46.dll" "$(OutDir)"</Com
     <ClCompile Include="..\src\Sketch01.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\assets\distancemap2d.fs.glsl" />
+    <None Include="..\assets\erode.fs.glsl" />
+    <None Include="..\assets\fire.fs.glsl" />
+    <None Include="..\assets\outline.fs.glsl" />
+    <None Include="..\assets\passthrough.vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

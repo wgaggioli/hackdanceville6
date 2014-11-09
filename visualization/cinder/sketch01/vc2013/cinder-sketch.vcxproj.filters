@@ -19,6 +19,9 @@
     <Filter Include="Asset Files">
       <UniqueIdentifier>{c4b67c7a-cf83-407b-9aa5-11518803076f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{bc103576-6968-4bf2-843e-17eba3e3e6a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -39,5 +42,22 @@
     <ClCompile Include="..\src\Sketch01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\distancemap2d.fs.glsl">
+      <Filter>Asset Files</Filter>
+    </None>
+    <None Include="..\assets\erode.fs.glsl">
+      <Filter>Asset Files</Filter>
+    </None>
+    <None Include="..\assets\outline.fs.glsl">
+      <Filter>Asset Files</Filter>
+    </None>
+    <None Include="..\assets\passthrough.vs.glsl">
+      <Filter>Asset Files</Filter>
+    </None>
+    <None Include="..\assets\fire.fs.glsl">
+      <Filter>Asset Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
