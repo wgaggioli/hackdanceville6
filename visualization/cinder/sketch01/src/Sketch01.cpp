@@ -24,7 +24,7 @@
 using namespace ci;
 using namespace ci::app;
 
-#define USE_FILE 1
+#define USE_FILE 0
 
 class Sketch01App : public AppNative {
 public:
@@ -43,8 +43,6 @@ public:
 
 	MayaCamUI			mMayaCam;
 	gl::BatchRef		mBatch;
-	gl::TextureRef		mDepthTexture;
-	Channel32f			mChannel;
 	gl::GlslProgRef		mTestShader;
 	audio::FilePlayerNodeRef		mFilePlayerNode;
 	audio::MonitorNodeRef			mMonitorNode1;
@@ -77,6 +75,8 @@ public:
 	};
 	std::deque<Particle> mParticles;
 	ci::vec2 mMousePos;
+	float mIntensity;
+	bool mApplyIntensity;
 };
 
 void Sketch01App::prepareSettings( Settings* settings )
@@ -91,9 +91,6 @@ void Sketch01App::setup()
 	cam.lookAt( vec3( 1000, 1000, 1000 ), vec3( 0 ) );
 	cam.setCenterOfInterestPoint( vec3( 0 ) );
 	mMayaCam.setCurrentCam( cam );
-
-	mChannel = Channel32f( loadImage( loadAsset( "depth.png" ) ) );
-	mDepthTexture = gl::Texture::create( mChannel );
 
 	mFilePlayerNode = audio::Context::master()->makeNode( new audio::FilePlayerNode() );
 	mGainNode = audio::Context::master()->makeNode( new audio::GainNode( 0.5f ) );
@@ -112,20 +109,26 @@ void Sketch01App::setup()
 	mLowpassNode >> mMonitorNode1;
 	mHighpassNode >> mMonitorNode2;
 
-#if ( !defined USE_FILE )
+#if ( !USE_FILE )
 		mContext.reset( new zmq::context_t( 1 ) );
 		mSubscriber.reset( new zmq::socket_t( *mContext, ZMQ_SUB ) );
-		//mSubscriber->connect( "tcp://172.31.252.124:5556" );
-		mSubscriber->connect( "tcp://localhost:5563" );
-		std::string channel( "dance-beat" );
-		mSubscriber->setsockopt( ZMQ_SUBSCRIBE, channel.c_str(), channel.size() );
-		int timeout = 5;
+		//mSubscriber->connect( "tcp://172.31.252.124:5556" ); // Will
+		mSubscriber->connect( "tcp://172.31.253.53:5556" ); // Tanner
+		//mSubscriber->connect( "tcp://localhost:5563" );
+		std::string stateChannel( "dancer-state" );
+		mSubscriber->setsockopt( ZMQ_SUBSCRIBE, stateChannel.c_str(), stateChannel.size() );
+		std::string beatChannel( "dance-beat" );
+		mSubscriber->setsockopt( ZMQ_SUBSCRIBE, beatChannel.c_str(), beatChannel.size() );
+		int timeout = 100;
 		mSubscriber->setsockopt( ZMQ_RCVTIMEO, &timeout, sizeof( timeout ) );
 #else
 	mJsonFileNode = JsonTree( app::loadAsset( "sample_dancer-state.txt" ) );
 	mJsonFileIter = mJsonFileNode.begin();
 	mIsCameraInit = false;
 #endif
+
+	mIntensity = 1.0f;
+	mApplyIntensity = false;
 }
 
 void Sketch01App::fileDrop( FileDropEvent event )
@@ -157,21 +160,30 @@ void Sketch01App::resize()
 	mMayaCam.setCurrentCam( cam );
 }
 
-
-
 void Sketch01App::update()
 {
+	bool isBeatMsg = false;
 	JsonTree updateNode;
 	mPointBBox = ci::AxisAlignedBox3f( vec3( FLT_MAX, FLT_MAX, FLT_MAX ), vec3( -FLT_MAX, -FLT_MAX, -FLT_MAX ) );
-#if ( !defined USE_FILE )
+#if ( !USE_FILE )
 	if( !mSubscriber->connected() ) {
 			return;
 		}
 	zmq::message_t update;
 	mSubscriber->recv( &update );
 	std::string jsonDataStr = std::string( static_cast<char*>( update.data() ), update.size() );
-	updateNode = JsonTree( jsonDataStr );
 	
+	if( !jsonDataStr.empty() ) {
+		int beatFoundPos = jsonDataStr.find( "dance-beat" );
+		if( beatFoundPos != std::string::npos ) {
+			isBeatMsg = true;
+		}
+		size_t firstBracePos = jsonDataStr.find_first_of( '{' );
+		if( firstBracePos != std::string::npos ) {
+			jsonDataStr = jsonDataStr.substr( firstBracePos, jsonDataStr.size() );
+		}
+		updateNode = JsonTree( jsonDataStr );
+	}
 #else
 	updateNode = *mJsonFileIter;
 	++mJsonFileIter;
@@ -181,17 +193,27 @@ void Sketch01App::update()
 #endif
 
 	{
-		if( mJsonFileIter->hasChild( "points" ) ) {
-			//JsonTree timestampNode = mJsonFileIter->getChild( "timestamp" );
-			JsonTree pointsNode = mJsonFileIter->getChild( "points" );
-			for( auto ptIter = pointsNode.begin(), ptEnd = pointsNode.end(); ptIter != ptEnd; ++ptIter ) {
-				const std::string key = ptIter->getKey();
-				float x = ptIter->getValueAtIndex<float>( 0 );
-				float y = ptIter->getValueAtIndex<float>( 1 );
-				float z = ptIter->getValueAtIndex<float>( 2 );
-				vec3 v = vec3( x, y, z );
-				mPointBBox.include( v );
-				mJointMap[key] = v;
+		if( isBeatMsg ){
+			if( updateNode.hasChild( "intensity" ) ) {
+				//JsonTree timestampNode = updateNode.getChild( "timestamp" );
+				JsonTree intensityNode = updateNode.getChild( "intensity" );
+				mIntensity = intensityNode.getValue<float>();
+				mApplyIntensity = true;
+			}
+		}
+		else {
+			if( updateNode.hasChild( "points" ) ) {
+				//JsonTree timestampNode = updateNode.getChild( "timestamp" );
+				JsonTree pointsNode = updateNode.getChild( "points" );
+				for( auto ptIter = pointsNode.begin(), ptEnd = pointsNode.end(); ptIter != ptEnd; ++ptIter ) {
+					const std::string key = ptIter->getKey();
+					float x = ptIter->getValueAtIndex<float>( 0 );
+					float y = ptIter->getValueAtIndex<float>( 1 );
+					float z = ptIter->getValueAtIndex<float>( 2 );
+					vec3 v = vec3( x, y, z );
+					mPointBBox.include( v );
+					mJointMap[key] = v;
+				}
 			}
 		}
 	}
@@ -209,25 +231,25 @@ void Sketch01App::update()
 		mParticles.resize( 100 );
 	}
 
-	size_t deadCount = 0;
-	for( auto &p : mParticles ) {
-		p.pos += p.vel * ( mMousePos.y  * 0.1f );
-		if( p.isDead || ( p.pos.z < 0.0f ) ) {
+	if( !mJointMap.empty() ) {
+		for( auto &p : mParticles ) {
+			p.pos += p.vel * ( mMousePos.y  * 0.1f );
+			if( p.isDead || ( p.pos.z < 0.0f ) ) {
 
-			int selJointIdx = randInt() % mJointMap.size();
-			auto jtIter = mJointMap.begin();
-			std::advance( jtIter, selJointIdx );
-			p.pos = jtIter->second;
-			p.vel = vec3( 0, 0, -1.0f );
-			p.isDead = false;
-		}// end if
-	}// end for
+				int selJointIdx = randInt() % mJointMap.size();
+				auto jtIter = mJointMap.begin();
+				std::advance( jtIter, selJointIdx );
+				p.pos = jtIter->second;
+				p.vel = vec3( 0, 0, -1.0f );
+				p.isDead = false;
+			}// end if
+		}// end for
+	}// end if
 }
 
 void Sketch01App::draw()
 {
 	gl::clear();
-	//drawOutline( 16 );
 
 	gl::pushMatrices();
 	gl::setMatrices( mMayaCam.getCamera() );
@@ -241,36 +263,14 @@ void Sketch01App::draw()
 
 	for( auto const &p : mParticles ) {
 		ci::gl::color( Color( 1, 0, 0 ) );
-		ci::gl::drawSphere( p.pos, p.size, 12 );
+		float size = p.size;
+		if( mApplyIntensity ) {
+			size *= mIntensity;
+		}
+		ci::gl::drawSphere( p.pos, size, 12 );
 	}
-
+	mApplyIntensity = false;
 	gl::popMatrices();
-
-#if 0
-	gl::disableDepthWrite();
-	gl::disableDepthRead();
-
-	gl::clear( Color::gray( 1.0f ) );
-	gl::color( Color::white() );
-	gl::draw( mDepthTexture, this->getWindowBounds() );
-	
-	//gl::enableDepthWrite();
-	//gl::enableDepthRead();
-	
-	gl::ScopedAlphaBlend( false );
-
-	float radius = 300;
-	ivec2 center = getWindowCenter();
-	if( mMonitorNode1->isEnabled() ) {
-		gl::color( ColorA( 1.0, 0.0, 0.0, 0.5 ) );
-		ci::gl::drawSolidCircle( center + ivec2( 0, 0 ), radius * mMonitorNode1->getVolume() );
-	}
-
-	if( mMonitorNode2->isEnabled() ) {
-		gl::color( ColorA( 0.0, 0.0, 1.0, 0.5 ) );
-		ci::gl::drawSolidCircle( center + ivec2( 0, 0 ), radius * mMonitorNode2->getVolume() );
-	}
-#endif
 }
 
 void Sketch01App::keyDown( KeyEvent event )
@@ -300,25 +300,6 @@ void Sketch01App::mouseMove( MouseEvent event )
 	if( !getWindowBounds().contains( event.getPos() ) )
 		return;
 	mMousePos = event.getPos();
-}
-
-//--------------------------------------------------------------
-void Sketch01App::drawOutline( size_t lineWidth )
-{
-#if 0 
-	gl::enableAlphaBlending( false );
-
-	{
-
-		//gl::color( Color(1,0,0) );
-		gl::ScopedTextureBind scopedTexture( mDepthTexture );
-		mOutliner.bindDistanceMap2D();
-		gl::drawSolidRect( app::getWindowBounds() );
-		mOutliner.unbindDistanceMap2D();
-	}
-
-	mOutliner.drawOutlines( lineWidth, vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-#endif
 }
 
 void Sketch01App::mouseDown( MouseEvent event )

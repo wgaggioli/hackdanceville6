@@ -44,20 +44,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\distancemap2d.fs.glsl">
+    <Text Include="..\assets\sample_dancer-state.txt">
       <Filter>Asset Files</Filter>
-    </None>
-    <None Include="..\assets\erode.fs.glsl">
-      <Filter>Asset Files</Filter>
-    </None>
-    <None Include="..\assets\outline.fs.glsl">
-      <Filter>Asset Files</Filter>
-    </None>
-    <None Include="..\assets\passthrough.vs.glsl">
-      <Filter>Asset Files</Filter>
-    </None>
-    <None Include="..\assets\fire.fs.glsl">
-      <Filter>Asset Files</Filter>
-    </None>
+    </Text>
   </ItemGroup>
 </Project>

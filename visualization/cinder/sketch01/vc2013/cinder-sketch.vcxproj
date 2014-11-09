@@ -197,11 +197,7 @@ xcopy /y "..\..\..\..\..\Cinder\lib\msw\x86\d3dcompiler_46.dll" "$(OutDir)"</Com
     <ClCompile Include="..\src\Sketch01.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\distancemap2d.fs.glsl" />
-    <None Include="..\assets\erode.fs.glsl" />
-    <None Include="..\assets\fire.fs.glsl" />
-    <None Include="..\assets\outline.fs.glsl" />
-    <None Include="..\assets\passthrough.vs.glsl" />
+    <Text Include="..\assets\sample_dancer-state.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
