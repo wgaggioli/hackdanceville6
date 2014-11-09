@@ -1,6 +1,6 @@
 
 #include <deque>
-#include "zeromq/zmq.hpp"
+#include "zeromq_osx/zmq.hpp"
 
 #include "cinder/app/AppNative.h"
 #include "cinder/app/RendererGl.h"
