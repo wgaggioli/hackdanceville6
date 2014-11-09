@@ -1,6 +1,10 @@
 
 #include <deque>
+#ifdef WIN32
+#include "zeromq/zmq.hpp"
+#else
 #include "zeromq_osx/zmq.hpp"
+#endif
 
 #include "cinder/app/AppNative.h"
 #include "cinder/app/RendererGl.h"
