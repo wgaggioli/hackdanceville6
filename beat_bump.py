@@ -2,14 +2,24 @@
 Install pyaudio here: http://people.csail.mit.edu/hubert/pyaudio/
 
 """
+import sys
 import argparse
 
 import pyaudio
 import wave
+import subprocess
 
 from subscriber import Subscriber
 
+
 CHUNK = 1024
+if sys.platform == 'darwin':
+    PLAY_COMMAND = 'afplay'
+elif sys.platform == 'win32':
+    sys.stderr.write("UH OH! we need a real command for this...\n")
+    PLAY_COMMAND = 'open'
+else:
+    PLAY_COMMAND = 'aplay'
 
 
 class Bumper(Subscriber):
@@ -19,11 +29,11 @@ class Bumper(Subscriber):
         if channels is None:
             channels = ['dance-beat']
         super(Bumper, self).__init__(channels, **kwargs)
-
-        # audio player
+        
         self.bass_path = bass_path
 
     def on_subscribe(self):
+        return
         self.fp = wave.open(self.bass_path, 'rb')
         self.audio = pyaudio.PyAudio()
         self.audio_stream = self.audio.open(
@@ -34,12 +44,15 @@ class Bumper(Subscriber):
         )
 
     def on_close(self):
+        return
         self.audio_stream.stop_stream()
         self.audio_stream.close()
         self.audio.terminate()
         self.fp.close()
 
     def on_event(self, beat):
+        subprocess.Popen(['afplay', self.bass_path])
+        return
         data = self.fp.readframes(CHUNK)
         while data:
             self.audio_stream.write(data)
