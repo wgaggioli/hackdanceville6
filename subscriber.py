@@ -14,8 +14,11 @@ class Subscriber(object):
     def on_close(self):
         pass
 
-    def subscribe(self):
+    def do_subscribe(self):
         self.pubsub.subscribe(self.channels)
+
+    def subscribe(self):
+        self.do_subscribe()
         self.on_subscribe()
         try:
             for item in self.pubsub.listen():
