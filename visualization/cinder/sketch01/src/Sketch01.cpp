@@ -29,7 +29,7 @@ using namespace ci;
 using namespace ci::app;
 
 #define USE_FILE 0
-#define USE_INPUT_AUDIO 0
+#define USE_INPUT_AUDIO 1
 
 class Sketch01App : public AppNative {
 public:
@@ -89,7 +89,7 @@ public:
 
 void Sketch01App::prepareSettings( Settings* settings )
 {
-	settings->prepareWindow( Window::Format().size( 960, 720 ).title( "Sketch01" ) );
+	settings->prepareWindow( Window::Format().size( 1280, 1000 ).title( "Sketch01" ) );
 	settings->setFrameRate( 60.0f );
 }
 
@@ -129,7 +129,7 @@ void Sketch01App::setup()
 		mSubscriber->setsockopt( ZMQ_SUBSCRIBE, stateChannel.c_str(), stateChannel.size() );
 		std::string beatChannel( "dance-beat" );
 		mSubscriber->setsockopt( ZMQ_SUBSCRIBE, beatChannel.c_str(), beatChannel.size() );
-		int timeout = 100;
+		int timeout = 5;
 		mSubscriber->setsockopt( ZMQ_RCVTIMEO, &timeout, sizeof( timeout ) );
 #else
 	mJsonFileNode = JsonTree( app::loadAsset( "sample_dancer-state.txt" ) );
@@ -275,16 +275,20 @@ void Sketch01App::draw()
 	gl::color( Color::white() );
 	for( auto const &jointPair : mJointMap ) {
 		const vec3 &pt = jointPair.second;
-		ci::gl::color( Color( 1, 1, 1 ) );
+		ci::gl::color( Color( 1.0f, 155.0f / 255.0f, 0.0f ) );
 		size_t size = 10.0f;
 		if( mMonitorNode1->isEnabled() ) {
 			size *= mMonitorNode1->getVolume() * 10.0f;
 		}
+		if( size < 10.0f ) {
+			size = 10.0f;
+		}
+
 		ci::gl::drawSphere( pt, size, 12 );
 	}
 
 	for( auto const &p : mParticles ) {
-		ci::gl::color( Color( 1, 0, 0 ) );
+		ci::gl::color( Color( 1.0f, 255.0f, 157.0f / 255.0f ) );
 		float size = p.size;
 		if( mApplyIntensity ) {
 			size *= mIntensity * 0.5f;
@@ -337,8 +341,8 @@ void Sketch01App::mouseDrag( MouseEvent event )
 
 void Sketch01App::setupGradient()
 {
-	const Colorf topColor( 0.0f, 0.0f, 0.0f );
-	const Colorf bottomColor( 0.5f, 0.5f, 0.5f );
+	const Colorf topColor( 0.0f, 133.0f / 255.0f, 130.0f / 255.0f );
+	const Colorf bottomColor( 0.0f, 0.0f, 60.0f / 255.0f );
 
 	mGradientRect = geom::Rect( Rectf( 0, 0, 1, 1 ) ).colors( topColor, topColor, bottomColor, bottomColor );
 	
