@@ -249,7 +249,12 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
+				New_Setting = "";
+				OTHER_LDFLAGS = (
+					../../../../../Cinder/lib/libcinder_d.a,
+					"-L/usr/local/lib",
+					"-lzmq",
+				);
 				PRODUCT_NAME = Sketch01;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -271,7 +276,12 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
+				New_Setting = "";
+				OTHER_LDFLAGS = (
+					"-L/usr/local/lib",
+					"-lzmq",
+					../../../../../Cinder/lib/libcinder.a,
+				);
 				PRODUCT_NAME = Sketch01;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
