@@ -12,7 +12,7 @@ import redis
 
 from subscriber import Subscriber
 
-CHUNK = 1024
+NFRAMES_BUFFER = 1024
 
 
 class BeatAnalyzer(object):
@@ -54,25 +54,14 @@ class BeatAnalyzer(object):
             self.write_cache()
         return tempo, list(beat_frames)
 
-    def manip_audio(self, payload):
-        delta = 0.5  # BS var
-        af = 'bass.wav'  # BS var
-        for wav in self.wavedict:
-            y = self.wavedict[wav]
-            new_wav = librosa.effects.time_stretch(y, delta)
-            librosa.output.write_wav('new_wav.wav', y, 22050)
-            # TODO: how to get this to play?
-
-    def run(self):
-        r = redis.StrictRedis(host='172.31.253.53', port=6379, db=0)
-        while True:
-            ps = r.pubsub()
-            ps.subscribe('dance-beat')  # TODO: change channel
-            l = ps.listen()
-            for msg in l:
-                if msg['type'] == 'message':
-                    payload = json.loads(msg['data'])
-                    self.manip_audio(payload)
+    # def manip_audio(self, payload):
+    #     delta = 0.5  # BS var
+    #     af = 'bass.wav'  # BS var
+    #     for wav in self.wavedict:
+    #         y = self.wavedict[wav]
+    #         new_wav = librosa.effects.time_stretch(y, delta)
+    #         librosa.output.write_wav('new_wav.wav', y, 22050)
+    #         # TODO: how to get this to play?
 
 
 class SongThread(threading.Thread):
@@ -84,14 +73,13 @@ class SongThread(threading.Thread):
 
     def run(self):
         while self.do_run:
-            data = self.fp.readframes(CHUNK)
+            data = self.fp.readframes(NFRAMES_BUFFER)
             if not data:
                 self.fp.rewind()
-                data = self.fp.readframes(CHUNK)
-            t = len(data) / float(self.audio_stream._rate)
+                data = self.fp.readframes(NFRAMES_BUFFER)
+            t = NFRAMES_BUFFER / float(self.audio_stream._rate)
             self.audio_stream.write(data)
-            time.sleep(t / 4. - .003)
-            print self.audio_stream._rate
+            time.sleep(t - .003)
 
     def stop(self):
         self.do_run = False
@@ -137,10 +125,19 @@ class SongPlayer(Subscriber):
         )
         self.song_thread.audio_stream = self.audio_stream
 
+    def add_offset(self, offset_in_ms):
+        offset = int(offset_in_ms / 1000. * self.rate)
+        new_pos = (self.fp.tell() + offset) % self.fp.getnframes()
+        self.fp.setpos(new_pos)
+
     def on_event(self, item):
         # adjust the song
+        print item
         if item['type'] == 'message':
             data = json.loads(item['data'])
+            if 'offsetInMillis' in data:
+                self.add_offset(data['offsetInMillis'])
+                print 'Adding offset of {}'.format(data['offsetInMillis'])
             if 'rateAdjustFactor' in data:
                 self.adjust_rate(data['rateAdjustFactor'])
                 print 'Adjusting rate by {}'.format(data['rateAdjustFactor'])
@@ -155,7 +152,7 @@ class SongMaster(object):
         self.redis = redis.Redis(host=redis_host)
 
         # init player
-        self.player = SongPlayer(song_file)
+        self.player = SongPlayer(song_file, redis_host=redis_host)
 
         # analyze and publish beat analysis
         self.beater = BeatAnalyzer(song_file)
