@@ -84,6 +84,7 @@ Adjustment request for altering playback of a song -
         "title": "blah",                    // song title
         "timestamp": 1415489686,            // request timestamp, long - time in millis
         "offsetInMillis": 224,              // offset request to alter tempo (+/-)
+        "rateAdjustFactor": 0.8             // factor to multiply playback rate (0.5 - 2)
     }
 
 #### Moves we can notice *...probably*
