@@ -51,6 +51,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Subscribes to pubsub and outputs a bass bump")
     parser.add_argument('--bass_file', default='bass.wav')
+    parser.add_argument('--redis_host', default='localhost')
     args = parser.parse_args()
-    bumper = Bumper(args.bass_file)
+    bumper = Bumper(args.bass_file, redis_host=args.redis_host)
     bumper.subscribe()

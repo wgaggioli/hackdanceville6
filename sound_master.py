@@ -32,16 +32,12 @@ class SoundMaster(object):
         for af in self.audio_files:
             y, sr = librosa.load(af)
             wavedict[af] = y
-        # wavedict_file = open('waveforms.json', 'w')
-        # json.dump(wavedict, wavedict_file)
-        # wavedict_file.close()
-        #print(wavedict)
         return wavedict
 
     def get_audio_bpm(self):
         bpmdict = {}
         for wave in self.wavedict:
-            tempo, beat_frames = librosa.beat.beat_track(\
+            tempo, beat_frames = librosa.beat.beat_track(
                 y=self.wavedict[wave], hop_length=64)
             #print(tempo)
             #print(beat_frames)

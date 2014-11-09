@@ -26,7 +26,7 @@ BODYPARTS_LOWER = [s.lower() for s in BODYPARTS]
 CACHE_FRAMES = 4
 VELOCITY_BEAT_CUTOFF = 1.5
 MAGNITUDE_CUTOFF = 0.2
-MINIMUM_BEAT_OFFSET = 1000
+MINIMUM_BEAT_OFFSET = 200
 
 
 def get_vector_delta(a,b):
@@ -51,7 +51,7 @@ class DanceInterpreter(object):
         self.velocities = {k:[] for k in BODYPARTS_LOWER}
         self.velocity_deltas = {k:[] for k in BODYPARTS_LOWER}
         self.last_beat_timestamp = 0
-    
+
     def run(self):
         pubsub = self.redis.pubsub()
         pubsub.subscribe(self.listen_channel)
@@ -61,7 +61,7 @@ class DanceInterpreter(object):
                 if message['type'] != 'message':
                     continue
                 self.frame(json.loads(message['data']))
-    
+
     def frame(self, message):
         timestamp = message['timestamp']
         # HACK
@@ -81,14 +81,16 @@ class DanceInterpreter(object):
             if len(part_positions) > CACHE_FRAMES:
                 part_positions.pop(0)
             values.append((partname, self.analyze_part(partname)))
-        if timestamp - self.last_beat_timestamp < MINIMUM_BEAT_OFFSET:
-            return
         # pick max value
         if len(values):
+            print timestamp, self.last_beat_timestamp, timestamp - self.last_beat_timestamp
+            if timestamp - self.last_beat_timestamp < MINIMUM_BEAT_OFFSET:
+                return
             partname, beat_value = max(values, key=itemgetter(1))
             if beat_value > 0:
+                print 'bow'
                 self.fire_beat(partname, beat_value)
-    
+
     def analyze_part(self, partname):
         positions = self.positions[partname]
         velocities = self.velocities[partname]
@@ -125,3 +127,17 @@ class DanceInterpreter(object):
         }
         self.redis.publish('dance-beat', json.dumps(payload))
         self.last_beat_timestamp = timestamp
+
+
+if __name__ == '__main__':
+    import redis
+    import sys
+
+    if len(sys.argv) > 1:
+        host = sys.argv[1]
+    else:
+        host = 'localhost'
+
+    r = redis.Redis(host=host)
+    dance_interpreter = DanceInterpreter(redis=r, listen_channel='dancer-state')
+    dance_interpreter.run()
