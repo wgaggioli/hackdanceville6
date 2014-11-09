@@ -22,6 +22,23 @@ BODYPARTS = [
     'RIGHT_ELBOW',
     'LEFT_HIP'
 ]
+PART_WEIGHT_MULTIPLIERS = {
+    'head': 100,
+    'left_elbow': 1,
+    'left_foot': 1,
+    'left_hand': 1,
+    'left_hip': 1,
+    'left_knee': 1,
+    'left_shoulder': 1,
+    'neck': 1,
+    'right_elbow': 1,
+    'right_foot': 1,
+    'right_hand': 1,
+    'right_hip': 1,
+    'right_knee': 1,
+    'right_shoulder': 1,
+    'torso': 1
+}
 BODYPARTS_LOWER = [s.lower() for s in BODYPARTS]
 CACHE_FRAMES = 4
 VELOCITY_DELTA_CUTOFF = 1.15
@@ -90,7 +107,7 @@ class DanceInterpreter(object):
             beat_value = sum([v for k,v in values])
             if beat_value > 0:
                 self.fire_beat(partname, beat_value)
-                print 'bow', beat_value
+                print partname, beat_value
 
     def analyze_part(self, partname):
         positions = self.positions[partname]
@@ -114,7 +131,10 @@ class DanceInterpreter(object):
             return 0 #  not enough data to continue
         if delta_count > CACHE_FRAMES:
             deltas.pop(0)
-        beat_worthy = [(d > VELOCITY_DELTA_CUTOFF) for d in deltas]
+        beat_worthy = [
+            (d * PART_WEIGHT_MULTIPLIERS[partname] > VELOCITY_DELTA_CUTOFF)
+            for d in deltas
+        ]
         if beat_worthy[-2] and not beat_worthy[-1]:
             return deltas[-2]
         return 0 #  nothing worth reporting
