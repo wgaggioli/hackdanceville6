@@ -44,6 +44,7 @@ public:
 	virtual void	prepareSettings( ci::app::AppBasic::Settings *settings ) override;
 
 	void drawOutline( size_t lineWidth );
+	void setupGradient();
 
 	MayaCamUI			mMayaCam;
 	gl::BatchRef		mBatch;
@@ -82,6 +83,7 @@ public:
 	ci::vec2 mMousePos;
 	float mIntensity;
 	bool mApplyIntensity;
+	geom::Rect mGradientRect;
 };
 
 void Sketch01App::prepareSettings( Settings* settings )
@@ -132,6 +134,7 @@ void Sketch01App::setup()
 	mIsCameraInit = false;
 #endif
 
+	setupGradient();
 	mIntensity = 1.0f;
 	mApplyIntensity = false;
 }
@@ -256,6 +259,13 @@ void Sketch01App::draw()
 {
 	gl::clear();
 
+	gl::disableDepthWrite();
+	gl::pushMatrices();
+	gl::setMatricesWindow( 1, 1 );
+	gl::draw( mGradientRect );
+	gl::popMatrices();
+	gl::enableDepthWrite();
+
 	gl::pushMatrices();
 	gl::setMatrices( mMayaCam.getCamera() );
 
@@ -270,7 +280,7 @@ void Sketch01App::draw()
 		ci::gl::color( Color( 1, 0, 0 ) );
 		float size = p.size;
 		if( mApplyIntensity ) {
-			size *= mIntensity;
+			size *= mIntensity * 0.5f;
 		}
 		ci::gl::drawSphere( p.pos, size, 12 );
 	}
@@ -317,6 +327,16 @@ void Sketch01App::mouseDrag( MouseEvent event )
 	mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 }
 
+
+void Sketch01App::setupGradient()
+{
+	const Colorf topColor( 0.0f, 0.0f, 0.0f );
+	const Colorf bottomColor( 0.5f, 0.5f, 0.5f );
+
+	mGradientRect = geom::Rect( Rectf( 0, 0, 1, 1 ) ).colors( topColor, topColor, bottomColor, bottomColor );
+	
+	//mGradientMesh = gl::Batch::create( rectSource, ci::gl::GlslNullProgramExc:: );
+}
 
 
 CINDER_APP_NATIVE( Sketch01App, RendererGl )
